@@ -33,7 +33,7 @@
       <input type="text" id="input-ingrediente" placeholder="Ej: vodka" class="btn" style="width: 250px;" />
       <button id="btn-ingrediente" class="btn">Buscar</button>
       <div id="loader">Cargando cocteles...</div>
-      <div id="resultado" class="tarjeta-coctel"></div>
+      <div id="resultado"></div>
     </section>
   </main>
 
@@ -66,22 +66,26 @@
         .then(res => res.json())
         .then(data => {
           loader.style.display = 'none';
-          console.log("✅ Respuesta:", data);
 
           if (!data.drinks || data.drinks.length === 0) {
-            resultado.innerHTML = `<p style="color:red;">No se encontraron cocteles con <strong>${ingrediente}</strong>.</p>`;
+            resultado.innerHTML = `<p style="color:red; ">No se encontraron cocteles con <strong>${ingrediente}</strong>.</p>`;
             return;
           }
 
-          resultado.innerHTML = `<h2>Cocteles con: ${ingrediente}</h2>`;
+          let html = `<h2 style="text-align:center; display:inline-block; ">Cocteles con: ${ingrediente}</h2>`;
+          html += `<div class="grid-cocteles">`;
+
           data.drinks.forEach(bebida => {
-            resultado.innerHTML += `
-              <div style="margin: 15px; display: inline-block; text-align: center;">
+            html += `
+              <div class="card-coctel">
                 <h4>${bebida.strDrink}</h4>
                 <img src="${bebida.strDrinkThumb}" alt="${bebida.strDrink}" width="150">
               </div>
             `;
           });
+
+          html += `</div>`;
+          resultado.innerHTML = html;
         })
         .catch(error => {
           loader.style.display = 'none';
@@ -90,7 +94,7 @@
         });
     });
 
-    // Global aleatorio
+    // Aleatorio
     function mostrarCoctelAleatorio() {
       const resultado = document.getElementById('resultado');
       const loader = document.getElementById('loader');
