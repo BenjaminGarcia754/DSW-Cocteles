@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buscar por Nombre - Cocteles</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-container">
+      <h1 class="logo">Cocteles 🍸</h1>
+      <ul class="nav-links">
+        <li><a href="/index.html">Inicio</a></li>
+        <li><a href="#" onclick="mostrarCoctelAleatorio()">Aleatorio</a></li>
+        <li><a href="/buscar.html">Buscar por nombre</a></li>
+        <li><a href="/ingrediente.html">Buscar por categoría</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="intro">
+      <h2>Buscar Coctel por Nombre</h2>
+      <p>Introduce el nombre del coctel que deseas buscar.</p>
+    </section>
+
+    <section class="seccion-aleatorio">
+      <input type="text" id="input-nombre" placeholder="Ej: Margarita" class="btn" style="width: 250px;" />
+      <button id="btn-buscar" class="btn">Buscar</button>
+      <div id="loader">Cargando coctel...</div>
+      <div id="resultado" class="tarjeta-coctel"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Explorador de Cocteles. Hecho con ❤️ en HTML + CSS + JS.</p>
+  </footer>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>

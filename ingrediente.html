@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buscar por Ingrediente - Cocteles</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-container">
+      <h1 class="logo">Cocteles 🍸</h1>
+      <ul class="nav-links">
+        <li><a href="/index.html">Inicio</a></li>
+        <li><a href="#" onclick="mostrarCoctelAleatorio()">Aleatorio</a></li>
+        <li><a href="/buscar.html">Buscar por nombre</a></li>
+        <li><a href="/ingrediente.html">Buscar por ingrediente</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="intro">
+      <h2>Buscar Cocteles por Ingrediente</h2>
+      <p>Ejemplo: <strong>vodka</strong>, <strong>rum</strong>, <strong>lime</strong>.</p>
+    </section>
+
+    <section class="seccion-aleatorio">
+      <input type="text" id="input-ingrediente" placeholder="Ej: vodka" class="btn" style="width: 250px;" />
+      <button id="btn-ingrediente" class="btn">Buscar</button>
+      <div id="loader">Cargando cocteles...</div>
+      <div id="resultado" class="tarjeta-coctel"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Explorador de Cocteles. Hecho con ❤️ en HTML + CSS + JS.</p>
+  </footer>
+
+  <script>
+    const input = document.getElementById('input-ingrediente');
+    const btn = document.getElementById('btn-ingrediente');
+    const resultado = document.getElementById('resultado');
+    const loader = document.getElementById('loader');
+
+    loader.style.display = 'none';
+
+    btn.addEventListener('click', () => {
+      const ingrediente = input.value.trim().toLowerCase();
+      if (!ingrediente) {
+        alert("Ingresa un ingrediente.");
+        return;
+      }
+
+      resultado.innerHTML = '';
+      loader.style.display = 'block';
+
+      const url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${encodeURIComponent(ingrediente)}`;
+      console.log("🔍 Consultando:", url);
+
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          loader.style.display = 'none';
+          console.log("✅ Respuesta:", data);
+
+          if (!data.drinks || data.drinks.length === 0) {
+            resultado.innerHTML = `<p style="color:red;">No se encontraron cocteles con <strong>${ingrediente}</strong>.</p>`;
+            return;
+          }
+
+          resultado.innerHTML = `<h2>Cocteles con: ${ingrediente}</h2>`;
+          data.drinks.forEach(bebida => {
+            resultado.innerHTML += `
+              <div style="margin: 15px; display: inline-block; text-align: center;">
+                <h4>${bebida.strDrink}</h4>
+                <img src="${bebida.strDrinkThumb}" alt="${bebida.strDrink}" width="150">
+              </div>
+            `;
+          });
+        })
+        .catch(error => {
+          loader.style.display = 'none';
+          resultado.innerHTML = `<p style="color:red;">Error al conectar con el API.</p>`;
+          console.error("❌ Error:", error);
+        });
+    });
+
+    // Global aleatorio
+    function mostrarCoctelAleatorio() {
+      const resultado = document.getElementById('resultado');
+      const loader = document.getElementById('loader');
+      resultado.innerHTML = '';
+      loader.style.display = 'block';
+
+      fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php')
+        .then(res => res.json())
+        .then(data => {
+          loader.style.display = 'none';
+          const bebida = data.drinks[0];
+          resultado.innerHTML = `
+            <h2>${bebida.strDrink}</h2>
+            <img src="${bebida.strDrinkThumb}" alt="${bebida.strDrink}" width="250">
+            <p><strong>Instrucciones:</strong> ${bebida.strInstructions}</p>
+          `;
+        })
+        .catch(error => {
+          loader.style.display = 'none';
+          resultado.innerHTML = `<p style="color:red;">Error al obtener coctel aleatorio.</p>`;
+          console.error(error);
+        });
+    }
+  </script>
+</body>
+</html>
